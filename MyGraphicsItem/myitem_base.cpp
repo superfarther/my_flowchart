@@ -56,16 +56,34 @@ void Myitem_base::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     central_point = this->pos();    //this->pos()默认返回图形中心点坐标，相对于scene坐标系
     update_adsPoint();              //更新吸附点坐标
 
+    //同步移动吸附点连接的箭头
+    Adsorption_point::connectArrowWhich toArrowWhich;
+    //上吸附点
+    toArrowWhich = getTop_adsPoint()->getToArrowWhich();
+    if(toArrowWhich != Adsorption_point::noArrow)
+    {
+        getTop_adsPoint()->getToArrow()->arrowRepaintEvent(getTop_adsPoint()->getPos(), toArrowWhich);
+    }
+    //下吸附点
+    toArrowWhich = getBelow_adsPoint()->getToArrowWhich();
+    if(toArrowWhich != Adsorption_point::noArrow)
+    {
+        getBelow_adsPoint()->getToArrow()->arrowRepaintEvent(getBelow_adsPoint()->getPos(), toArrowWhich);
+    }
+    //左吸附点
+    toArrowWhich = getLeft_adsPoint()->getToArrowWhich();
+    if(toArrowWhich != Adsorption_point::noArrow)
+    {
+        getLeft_adsPoint()->getToArrow()->arrowRepaintEvent(getLeft_adsPoint()->getPos(), toArrowWhich);
+    }
+    //右吸附点
+    toArrowWhich = getRight_adsPoint()->getToArrowWhich();
+    if(toArrowWhich != Adsorption_point::noArrow)
+    {
+        getRight_adsPoint()->getToArrow()->arrowRepaintEvent(getRight_adsPoint()->getPos(), toArrowWhich);
+    }
+
     //qDebug("%f", this->getTop_adsPoint()->QGraphicsItem::pos().x());    Why???
-
-    /*
-    qDebug("中心点坐标:(%f, %f)  上吸附点坐标:(%f, %f)   下吸附点坐标(%f, %f)   左吸附点坐标:(%f, %f)",
-           central_point.x(), central_point.y(),
-           top_adsPoint->getPos().x(), top_adsPoint->getPos().y(),
-           below_adsPoint->getPos().x(), below_adsPoint->getPos().y(),
-           left_adsPoint->getPos().x(), left_adsPoint->getPos().y());
-    */
-
     QAbstractGraphicsShapeItem::mouseMoveEvent(event);
 }
 
@@ -124,7 +142,7 @@ void Myitem_base::initialize_adsPoint()
     radius = right_adsPoint->getRadius();
     this->right_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
 
-    //disappear_adsPoint();   //初始产生图元时，设置吸附点不可见
+    disappear_adsPoint();   //初始产生图元时，设置吸附点不可见
 }
 
 void Myitem_base::update_adsPoint()
@@ -193,7 +211,7 @@ Adsorption_point *Myitem_base::whichAdsPoint(QPointF eventPos)
         return nullptr;
 }
 
-void Myitem_base::my_hoverEnterEvent(QGraphicsSceneMouseEvent *event)
+void Myitem_base::my_hoverEnterEvent()
 {
     QPen pen(Qt::green, 2);
     this->setPen(pen);
@@ -201,6 +219,13 @@ void Myitem_base::my_hoverEnterEvent(QGraphicsSceneMouseEvent *event)
     show_adsPoint();    //吸附点可见
 }
 
+void Myitem_base::my_hoverLeaveEvent()
+{
+    QPen pen(Qt::black, 2);
+    this->setPen(pen);
+
+    disappear_adsPoint();   //吸附点不可见
+}
 
 
 QPointF Myitem_base::getCentral_point()

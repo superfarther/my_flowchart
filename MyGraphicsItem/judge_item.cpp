@@ -1,7 +1,7 @@
 #include <QPolygon>
 #include "judge_item.h"
 
-Judge_item::Judge_item(QGraphicsItem *parent)
+Judge_item::Judge_item(QGraphicsItem *parent) : Myitem_base(parent)
 {
     setLenth(150);
     setWidth(80);

@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QGraphicsScene>
 #include "MyPoint/adsorption_point.h"
+#include "arrow_item.h"
 
 class Myitem_base : public QAbstractGraphicsShapeItem
 {
@@ -33,7 +34,8 @@ public:
     void disappear_adsPoint();  //设置吸附点不可见
     Adsorption_point* whichAdsPoint(QPointF eventPos);  //通过hover事件的坐标，判断发生的hover事件是否与吸附点有关。如果有关，返回其指针
 
-    void my_hoverEnterEvent(QGraphicsSceneMouseEvent *event);   //吸附点触发mouseMove事件时，光标移入图元
+    void my_hoverEnterEvent();  //当拖动箭头时，光标移入item
+    void my_hoverLeaveEvent();  //当拖动箭头时，光标移出item
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;

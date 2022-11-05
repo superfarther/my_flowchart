@@ -1,6 +1,6 @@
 #include "procedure_item.h"
 
-Procedure_item::Procedure_item(QGraphicsItem *parent)
+Procedure_item::Procedure_item(QGraphicsItem *parent) : Myitem_base(parent)
 {
     setLenth(150);
     setWidth(80);
