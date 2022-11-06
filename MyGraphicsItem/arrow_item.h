@@ -2,6 +2,9 @@
 #define ARROW_ITEM_H
 
 #include <QGraphicsLineItem>
+#include <QGraphicsTextItem>
+#include <QFont>
+#include <QGraphicsSceneMouseEvent>
 #include "arrowcluster.h"
 #include "MyPoint/adsorption_point.h"
 #define PAI 3.14159265358979
@@ -41,6 +44,8 @@ public:
     arrowLogicType getLogicType() const;
     void setLogicType(const arrowLogicType &value);
 
+    QGraphicsTextItem *getText() const;
+
     //重写paint以设置反走样
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
@@ -51,6 +56,11 @@ public:
     //item若连接箭簇，则参数pos赋给相应箭头的endPoint
     void arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhich toArrowWhich);
     void arrowClusterRepaintEvent();
+
+protected:
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;    //右键双击，设置菱形框的T分支
 
 private:
     QPointF startPoint; //相对于scene坐标系
@@ -63,6 +73,8 @@ private:
     Adsorption_point* clusterToAdsPoint = nullptr;   //箭簇连接的吸附点
 
     arrowLogicType logicType = noType;  //箭头的逻辑类型,初始时不确定
+
+    QGraphicsTextItem* text = nullptr;  //仅用于菱形框的分支提示
 };
 
 #endif // ARROW_ITEM_H

@@ -6,10 +6,13 @@
 
 ArrowItem::ArrowItem(QGraphicsItem *parent) : QGraphicsLineItem(parent)
 {
+    this->setAcceptHoverEvents(true);
+
     QPen pen(Qt::black, 2);
     setPen(pen);
 
     this->arrowCluster_lenth = 16;
+    this->text = new QGraphicsTextItem(this);
 }
 
 ArrowItem::~ArrowItem()
@@ -60,6 +63,7 @@ void ArrowItem::arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhi
     QLineF line(startPoint, endPoint);
     this->setLine(line);
     this->arrowClusterRepaintEvent();
+    this->text->setPos((this->startPoint+this->endPoint)/2);    //text跟随箭头移动
     //update(this->boundingRect()); 暂不清楚是否需要update
 }
 
@@ -77,6 +81,48 @@ void ArrowItem::arrowClusterRepaintEvent()
     QPolygonF arrowClusterShape;
     arrowClusterShape << pointC << pointD << endPoint;
     arrowCluster->setPolygon(arrowClusterShape);
+}
+
+void ArrowItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    QPen pen(Qt::green, 2);
+    this->setPen(pen);
+    this->setCursor(Qt::PointingHandCursor);
+
+    QGraphicsLineItem::hoverEnterEvent(event);
+}
+
+void ArrowItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    QPen pen(Qt::black, 2);
+    setPen(pen);
+    this->setCursor(Qt::ArrowCursor);
+
+    QGraphicsLineItem::hoverLeaveEvent(event);
+}
+
+void ArrowItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        text->setPlainText("T");
+        //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
+        text->setPos((this->startPoint+this->endPoint)/2);
+        text->adjustSize();
+
+        QFont font;
+        font.setBold(true);
+        font.setFamily("微软雅黑");
+        font.setPointSize(13);
+        text->setFont(font);
+        //this->scene()->addItem(text); 因为text是箭头的子对象，因此不需手动添加到scene中
+    }
+    QGraphicsLineItem::mouseDoubleClickEvent(event);
+}
+
+QGraphicsTextItem *ArrowItem::getText() const
+{
+    return text;
 }
 
 ArrowItem::arrowLogicType ArrowItem::getLogicType() const
