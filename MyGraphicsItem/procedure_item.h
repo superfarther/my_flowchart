@@ -13,6 +13,8 @@ public:
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
+    void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) Q_DECL_OVERRIDE;
+
 private:
     Myitem_base* nextItem = nullptr;
 };

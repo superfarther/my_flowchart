@@ -42,3 +42,19 @@ void Judge_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     //painter->drawRoundedRect(rect, 35, 35);
     //painter->drawRect(rect);
 }
+
+void Judge_item::setNextItem(Myitem_base* nextItem, ArrowItem* arrow)
+{
+    if(arrow->getLogicType() == ArrowItem::falseType)
+    {
+        this->nextFalseItem = nextItem;
+
+        qDebug("judge图元的F分支指向 %s图元", typeid(*nextItem).name());
+    }
+    else
+    {
+        this->nextTrueItem = nextItem;
+
+        qDebug("judge图元的T分支指向 %s图元", typeid(*nextItem).name());
+    }
+}

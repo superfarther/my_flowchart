@@ -21,7 +21,6 @@ void My_graphicsscene::connectScene_adsPoint(My_graphicsscene *scene, Myitem_bas
     connect(item->getBelow_adsPoint(), &Adsorption_point::arrowPress, scene, &My_graphicsscene::on_arrowPress);
     connect(item->getBelow_adsPoint(), &Adsorption_point::arrowMove, scene, &My_graphicsscene::on_arrowMove);
     connect(item->getBelow_adsPoint(), &Adsorption_point::arrowRelease, scene, &My_graphicsscene::on_arrowRelease);
-    //下吸附点
     //左吸附点
     connect(item->getLeft_adsPoint(), &Adsorption_point::arrowPress, scene, &My_graphicsscene::on_arrowPress);
     connect(item->getLeft_adsPoint(), &Adsorption_point::arrowMove, scene, &My_graphicsscene::on_arrowMove);
@@ -68,11 +67,16 @@ void My_graphicsscene::on_myLabClick(MyLabel::myLabType clickedLabType)
 
 void My_graphicsscene::on_arrowPress(Adsorption_point *startAdsPoint)
 {
+    //配置箭头
     drawingArrow = new ArrowItem();
     drawingArrow->setStartPoint(startAdsPoint->getPos());
     drawingArrow->setTailToAdsPoint(startAdsPoint);
+    if(typeid(*(startAdsPoint->parentItem())) != typeid(Judge_item))
+    {
+        drawingArrow->setLogicType(ArrowItem::commonType);  //若item为菱形框，则需在连接好箭头后，手动确定箭头的逻辑类型(T or F)
+    }
     this->addItem(drawingArrow);
-
+    //配置吸附点
     startAdsPoint->setToArrow(drawingArrow);
     startAdsPoint->setToArrowWhich(Adsorption_point::arrowTail);
 }
@@ -153,13 +157,20 @@ void My_graphicsscene::on_arrowRelease(QPointF arrow_ReleasePoint)
         //如果在arrow在吸附点上结束绘制，arrow被吸附
         if(highLightingAdsPoint)
         {
+            //配置箭头
             QLineF linef(drawingArrow->getStartPoint(), highLightingAdsPoint->getPos());
             drawingArrow->setLine(linef);
             drawingArrow->setEndPoint(highLightingAdsPoint->getPos());
             drawingArrow->setClusterToAdsPoint(highLightingAdsPoint);
-
+            //配置吸附点
             highLightingAdsPoint->setToArrow(drawingArrow);
             highLightingAdsPoint->setToArrowWhich(Adsorption_point::arrowCluster);
+            //配置图元逻辑
+            Myitem_base* startItem = dynamic_cast<Myitem_base*>(drawingArrow->getTailToAdsPoint()->parentItem()); //箭头绘制过程中的起始图元
+            if(typeid(*startItem) != typeid(Judge_item))
+            {
+                startItem->setNextItem(dynamic_cast<Myitem_base*>(highLightingAdsPoint->parentItem())); //括号内为箭头绘制过程中的终止图元
+            }
         }
         //否则
         else

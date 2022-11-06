@@ -37,6 +37,8 @@ public:
     void my_hoverEnterEvent();  //当拖动箭头时，光标移入item
     void my_hoverLeaveEvent();  //当拖动箭头时，光标移出item
 
+    virtual void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) = 0;    //纯虚函数
+
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;

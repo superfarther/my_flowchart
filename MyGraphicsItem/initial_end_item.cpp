@@ -40,3 +40,11 @@ void Initial_end_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->drawRoundedRect(rect, 35, 35);
     //painter->drawRect(rect);
 }
+
+void Initial_end_item::setNextItem(Myitem_base* nextItem, ArrowItem* arrow)
+{
+    Q_UNUSED(arrow);
+    this->nextItem = nextItem;
+
+    qDebug("ini图元指向 %s图元", typeid(*nextItem).name());
+}

@@ -79,6 +79,16 @@ void ArrowItem::arrowClusterRepaintEvent()
     arrowCluster->setPolygon(arrowClusterShape);
 }
 
+ArrowItem::arrowLogicType ArrowItem::getLogicType() const
+{
+    return logicType;
+}
+
+void ArrowItem::setLogicType(const arrowLogicType &value)
+{
+    logicType = value;
+}
+
 Adsorption_point *ArrowItem::getTailToAdsPoint() const
 {
     return tailToAdsPoint;

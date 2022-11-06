@@ -36,3 +36,11 @@ void Procedure_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QRect rect = QRect(-lenth/2, -width/2, lenth, width); //这个rect在scene坐标系中
     painter->drawRect(rect);
 }
+
+void Procedure_item::setNextItem(Myitem_base* nextItem, ArrowItem* arrow)
+{
+    Q_UNUSED(arrow);
+    this->nextItem = nextItem;
+
+    qDebug("pro图元指向 %s图元", typeid(*nextItem).name());
+}

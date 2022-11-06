@@ -227,7 +227,6 @@ void Myitem_base::my_hoverLeaveEvent()
     disappear_adsPoint();   //吸附点不可见
 }
 
-
 QPointF Myitem_base::getCentral_point()
 {
     return central_point;

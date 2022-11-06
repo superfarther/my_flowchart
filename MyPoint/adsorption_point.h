@@ -5,8 +5,7 @@
 
 class ArrowItem;
 
-class
-        Adsorption_point : public QObject, public MyPointBase
+class Adsorption_point : public QObject, public MyPointBase
 {
     Q_OBJECT
 

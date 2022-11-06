@@ -12,6 +12,15 @@ class ArrowItem : public QGraphicsLineItem
 {
 
 public:
+    //箭头的逻辑类型，由引出箭头的图元决定
+    typedef enum arrowLogicType
+    {
+        noType = -1,    //暂不确定
+        commonType,     //普通箭头
+        trueType,       //菱形框的T分支
+        falseType       //菱形框的F分支
+    }arrowLogicType;
+
     ArrowItem(QGraphicsItem *parent=0);
     ~ArrowItem();
 
@@ -28,6 +37,9 @@ public:
 
     Adsorption_point *getClusterToAdsPoint() const;
     void setClusterToAdsPoint(Adsorption_point *value);
+
+    arrowLogicType getLogicType() const;
+    void setLogicType(const arrowLogicType &value);
 
     //重写paint以设置反走样
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
@@ -49,6 +61,8 @@ private:
 
     Adsorption_point* tailToAdsPoint = nullptr;  //箭尾连接的吸附点
     Adsorption_point* clusterToAdsPoint = nullptr;   //箭簇连接的吸附点
+
+    arrowLogicType logicType = noType;  //箭头的逻辑类型,初始时不确定
 };
 
 #endif // ARROW_ITEM_H
