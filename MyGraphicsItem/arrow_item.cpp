@@ -4,15 +4,18 @@
 #include <my_graphicsscene.h>
 #include "arrow_item.h"
 
-ArrowItem::ArrowItem(QGraphicsItem *parent) : QGraphicsLineItem(parent)
+ArrowItem::ArrowItem(QGraphicsItem *parent, QObject *objParent) : QGraphicsLineItem(parent), QObject(objParent)
 {
     this->setAcceptHoverEvents(true);
-
     QPen pen(Qt::black, 2);
     setPen(pen);
 
     this->arrowCluster_lenth = 16;
     this->text = new QGraphicsTextItem(this);
+
+    timer = new QTimer(this);
+    timer->setSingleShot(true); //设置单次计时器
+    connect(timer, &QTimer::timeout, this, &ArrowItem::mouseRightButtonSignalClick);
 }
 
 ArrowItem::~ArrowItem()
@@ -33,14 +36,6 @@ void ArrowItem::paintArrowCluster()
     qreal angleZ = line.angle(); //箭头倾斜角度
     qreal radianZ = angleZ*PAI/180; //箭头倾斜弧度
     qreal radianAlpha = 11*PAI/6 - radianZ;  //角α
-    /*
-    QPointF pointC(endPoint.x() - arrowCluster_lenth/2*cos(radianAlpha),
-                   endPoint.y() + arrowCluster_lenth/2*sin(radianAlpha));
-    QPointF pointD(endPoint.x() + arrowCluster_lenth/2*cos(radianAlpha),
-                   endPoint.y() - arrowCluster_lenth/2*sin(radianAlpha));
-    QPointF pointE(endPoint.x() + sqrt(3)*arrowCluster_lenth/2*cos(2*PAI-radianZ),
-                   endPoint.y() + sqrt(3)*arrowCluster_lenth/2*sin(2*PAI-radianZ));
-    */
     QPointF pointC(endPoint.x() - arrowCluster_lenth*cos(radianAlpha),
                    endPoint.y() - arrowCluster_lenth*sin(radianAlpha));
     QPointF pointD(endPoint.x() - arrowCluster_lenth*sin(PAI/6-radianAlpha),
@@ -105,19 +100,64 @@ void ArrowItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::RightButton)
     {
-        text->setPlainText("T");
-        //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
-        text->setPos((this->startPoint+this->endPoint)/2);
-        text->adjustSize();
+        Myitem_base* startItem = dynamic_cast<Myitem_base*>(this->getTailToAdsPoint()->parentItem());
+        if(typeid(*startItem) == typeid(Judge_item) && this->getClusterToAdsPoint() != nullptr)
+        {
+            timer->stop();
 
-        QFont font;
-        font.setBold(true);
-        font.setFamily("微软雅黑");
-        font.setPointSize(13);
-        text->setFont(font);
-        //this->scene()->addItem(text); 因为text是箭头的子对象，因此不需手动添加到scene中
+            this->setLogicType(falseType);
+            Myitem_base* endItem = dynamic_cast<Myitem_base*>(this->getClusterToAdsPoint()->parentItem());
+            startItem->setNextItem(endItem, this);
+
+            text->setPlainText("F");
+            //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
+            text->setPos((this->startPoint+this->endPoint)/2);
+            text->adjustSize();
+
+            QFont font;
+            font.setBold(true);
+            font.setFamily("微软雅黑");
+            font.setPointSize(13);
+            text->setFont(font);
+            //this->scene()->addItem(text); 因为text是箭头的子对象，所以不需手动添加到scene中
+        }
     }
-    QGraphicsLineItem::mouseDoubleClickEvent(event);
+
+    //QGraphicsLineItem::mouseDoubleClickEvent(event);  若将双击事件传递给父类，会导致计时器被重新启动，why???
+}
+
+void ArrowItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(event->button() == Qt::RightButton)
+    {
+        Myitem_base* startItem = dynamic_cast<Myitem_base*>(this->getTailToAdsPoint()->parentItem());
+        if(typeid(*startItem) == typeid(Judge_item) && this->getClusterToAdsPoint() != nullptr)
+        {
+            timer->start(300);
+        }
+    }
+
+    QGraphicsLineItem::mousePressEvent(event);
+}
+
+void ArrowItem::mouseRightButtonSignalClick()
+{
+    this->setLogicType(trueType);
+    Myitem_base* startItem = dynamic_cast<Myitem_base*>(this->getTailToAdsPoint()->parentItem());
+    Myitem_base* endItem = dynamic_cast<Myitem_base*>(this->getClusterToAdsPoint()->parentItem());
+    startItem->setNextItem(endItem, this);
+
+    text->setPlainText("T");
+    //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
+    text->setPos((this->startPoint+this->endPoint)/2);
+    text->adjustSize();
+
+    QFont font;
+    font.setBold(true);
+    font.setFamily("微软雅黑");
+    font.setPointSize(13);
+    text->setFont(font);
+    //this->scene()->addItem(text); 因为text是箭头的子对象，所以不需手动添加到scene中
 }
 
 QGraphicsTextItem *ArrowItem::getText() const

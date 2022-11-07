@@ -5,14 +5,14 @@
 #include <QGraphicsTextItem>
 #include <QFont>
 #include <QGraphicsSceneMouseEvent>
+#include <QTimer>
 #include "arrowcluster.h"
 #include "MyPoint/adsorption_point.h"
 #define PAI 3.14159265358979
 
-
-
-class ArrowItem : public QGraphicsLineItem
+class ArrowItem : public QObject, public QGraphicsLineItem
 {
+    Q_OBJECT
 
 public:
     //箭头的逻辑类型，由引出箭头的图元决定
@@ -24,7 +24,7 @@ public:
         falseType       //菱形框的F分支
     }arrowLogicType;
 
-    ArrowItem(QGraphicsItem *parent=0);
+    ArrowItem(QGraphicsItem *parent=0, QObject *objParent=0);
     ~ArrowItem();
 
     QPointF getStartPoint() const;
@@ -60,7 +60,11 @@ public:
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;    //右键双击，设置菱形框的T分支
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;    //右键双击，设置菱形框的F分支
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;        //右键单击，设置菱形框的T分支
+
+public slots:
+    void mouseRightButtonSignalClick();  //创建一个箭头的单击函数，以区分右键单击和双击
 
 private:
     QPointF startPoint; //相对于scene坐标系
@@ -75,6 +79,8 @@ private:
     arrowLogicType logicType = noType;  //箭头的逻辑类型,初始时不确定
 
     QGraphicsTextItem* text = nullptr;  //仅用于菱形框的分支提示
+
+    QTimer *timer;
 };
 
 #endif // ARROW_ITEM_H
