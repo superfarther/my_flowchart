@@ -24,6 +24,14 @@ public:
         falseType       //菱形框的F分支
     }arrowLogicType;
 
+    //箭头的绘制类型
+    typedef enum arrowPaintingType
+    {
+        notype = -1,    //暂不确定
+        straight        //直线
+
+    }arrowPaintingType;
+
     ArrowItem(QGraphicsItem *parent=0, QObject *objParent=0);
     ~ArrowItem();
 

@@ -4,8 +4,12 @@
 
 Myitem_base::Myitem_base(QGraphicsItem *parent): QAbstractGraphicsShapeItem(parent)
 {
+    this->lenth = 150;
+    this->width = 80;
+
     setAcceptHoverEvents(true);
     setFlags(QGraphicsItem::ItemIsMovable);
+    initialize_text();
 }
 
 Myitem_base::~Myitem_base()
@@ -87,6 +91,38 @@ void Myitem_base::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     QAbstractGraphicsShapeItem::mouseMoveEvent(event);
 }
 
+void Myitem_base::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+
+    }
+
+    QAbstractGraphicsShapeItem::mouseDoubleClickEvent(event);
+}
+
+void Myitem_base::initialize_text()
+{
+    text = new QGraphicsTextItem(this);
+    text->setHtml(QString("<div style='background-color: #FFEBCD;'>") + "" + "</div>");
+    text->setTextInteractionFlags(Qt::TextEditorInteraction);
+    text->setTextWidth(this->getLenth()-20);
+    text->setPos(-lenth/2+10, -width/2);   //相对于父图元的坐标
+    //文字居中
+    QTextBlockFormat format;
+    format.setAlignment(Qt::AlignCenter);
+    QTextCursor cursor = text->textCursor();
+    cursor.select(QTextCursor::Document);
+    cursor.mergeBlockFormat(format);
+    cursor.clearSelection();
+    text->setTextCursor(cursor);
+    //设置字体
+    QFont font;
+    font.setBold(true);
+    font.setFamily("微软雅黑");
+    font.setPointSize(10);
+    text->setFont(font);
+}
 
 
 Adsorption_point *Myitem_base::getRight_adsPoint() const

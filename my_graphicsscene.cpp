@@ -139,7 +139,8 @@ void My_graphicsscene::on_arrowMove(QPointF arrow_movingPoint, Adsorption_point 
             //drawingArrow（即正在移动的箭头本身）可能是item[0]
             //当光标下只有箭头时，item[1]应该是箭头，此时不能进入if语句块内
             //当光标下既有箭头，也有item时，item[1]应该是最上方的MyItem_base
-            if(list.length() > 1 && typeid(*list.at(1)) != typeid(ArrowItem) && typeid(*list.at(1)) != typeid(ArrowCluster))    //排除掉所有箭头与箭簇
+            //排除掉箭头、箭簇、textItem
+            if(list.length() > 1 && (typeid(*list.at(1)) == typeid(Initial_end_item) || typeid(*list.at(1)) == typeid(Judge_item) || typeid(*list.at(1)) == typeid(Procedure_item)))
             {
                 highLightingItem = dynamic_cast<Myitem_base*> (list.at(1));
                 highLightingItem->my_hoverEnterEvent();

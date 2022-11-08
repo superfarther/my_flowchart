@@ -5,6 +5,8 @@
 #include <QPen>
 #include <QPainter>
 #include <QGraphicsScene>
+#include <QTextBlockFormat>
+#include <QTextCursor>
 #include "MyPoint/adsorption_point.h"
 #include "arrow_item.h"
 
@@ -39,11 +41,14 @@ public:
 
     virtual void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) = 0;    //纯虚函数
 
+    void initialize_text();
+
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     qreal lenth;        //对应boundingrect中的rect的长
@@ -55,6 +60,8 @@ private:
     Adsorption_point *below_adsPoint;
     Adsorption_point *left_adsPoint;     //左吸附点
     Adsorption_point *right_adsPoint;    //右吸附点
+
+    QGraphicsTextItem* text;
 };
 
 #endif // MYITEM_BASE_H
