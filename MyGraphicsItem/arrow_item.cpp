@@ -26,7 +26,9 @@ ArrowItem::~ArrowItem()
 void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setRenderHint(QPainter::Antialiasing, true);   //反走样
-    QGraphicsLineItem::paint(painter, option, widget);
+    if(paintingType == straight){
+        QGraphicsLineItem::paint(painter, option, widget);
+    }
 }
 
 void ArrowItem::paintArrowCluster()
@@ -76,6 +78,26 @@ void ArrowItem::arrowClusterRepaintEvent()
     QPolygonF arrowClusterShape;
     arrowClusterShape << pointC << pointD << endPoint;
     arrowCluster->setPolygon(arrowClusterShape);
+}
+
+void ArrowItem::identifyPaintingType()
+{
+    if(clusterToAdsPoint != nullptr){
+        Myitem_base* startItem = dynamic_cast<Myitem_base*>(tailToAdsPoint->parentItem());  //该箭头连接的起始图元
+        Myitem_base* endItem =  dynamic_cast<Myitem_base*>(clusterToAdsPoint->parentItem());  //该箭头连接的终止图元
+        if(tailToAdsPoint == startItem->getLeft_adsPoint() && clusterToAdsPoint == endItem->getLeft_adsPoint()
+           && typeid(*startItem) != typeid(Initial_end_item) && typeid(*endItem) != typeid(Initial_end_item))
+        {
+            paintingType = judge_rect_left;
+            qDebug("该箭头是judge_rect_left");
+        }
+        else if(startItem->getBelow_adsPoint() != nullptr && typeid(*startItem) == typeid(Judge_item)
+                && tailToAdsPoint == startItem->getRight_adsPoint())
+        {
+            paintingType = judge_right;
+            qDebug("该箭头是judge_right");
+        }
+    }
 }
 
 void ArrowItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -158,6 +180,11 @@ void ArrowItem::mouseRightButtonSignalClick()
     font.setPointSize(13);
     text->setFont(font);
     //this->scene()->addItem(text); 因为text是箭头的子对象，所以不需手动添加到scene中
+}
+
+ArrowItem::arrowPaintingType ArrowItem::getPaintingType() const
+{
+    return paintingType;
 }
 
 QGraphicsTextItem *ArrowItem::getText() const

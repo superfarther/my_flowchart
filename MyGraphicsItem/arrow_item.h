@@ -27,9 +27,9 @@ public:
     //箭头的绘制类型
     typedef enum arrowPaintingType
     {
-        notype = -1,    //暂不确定
-        straight        //直线
-
+        straight = 0,       //直线
+        judge_rect_left = 1,    //菱形左吸附点和矩形左吸附点相连，WHILE/DO-WHILE
+        judge_right    //菱形右吸附点引出的箭头，且该菱形下吸附点已经引出了箭头，WHILE
     }arrowPaintingType;
 
     ArrowItem(QGraphicsItem *parent=0, QObject *objParent=0);
@@ -54,7 +54,6 @@ public:
 
     QGraphicsTextItem *getText() const;
 
-    //重写paint以设置反走样
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
     void paintArrowCluster();
@@ -64,6 +63,9 @@ public:
     //item若连接箭簇，则参数pos赋给相应箭头的endPoint
     void arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhich toArrowWhich);
     void arrowClusterRepaintEvent();
+
+    void identifyPaintingType();    //标识（设置）箭头的绘制类型
+    arrowPaintingType getPaintingType() const;  //获得箭头的绘制类型
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
@@ -85,6 +87,7 @@ private:
     Adsorption_point* clusterToAdsPoint = nullptr;   //箭簇连接的吸附点
 
     arrowLogicType logicType = noType;  //箭头的逻辑类型,初始时不确定
+    arrowPaintingType paintingType = straight;  //箭头的绘制类型，初始为直线
 
     QGraphicsTextItem* text = nullptr;  //仅用于菱形框的分支提示
 

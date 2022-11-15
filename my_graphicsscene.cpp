@@ -160,9 +160,10 @@ void My_graphicsscene::on_arrowRelease(QPointF arrow_ReleasePoint)
         {
             //配置箭头
             QLineF linef(drawingArrow->getStartPoint(), highLightingAdsPoint->getPos());
-            drawingArrow->setLine(linef);
             drawingArrow->setEndPoint(highLightingAdsPoint->getPos());
             drawingArrow->setClusterToAdsPoint(highLightingAdsPoint);
+            drawingArrow->identifyPaintingType();   //标识箭头绘制类型
+            drawingArrow->setLine(linef);
             //配置吸附点
             highLightingAdsPoint->setToArrow(drawingArrow);
             highLightingAdsPoint->setToArrowWhich(Adsorption_point::arrowCluster);
