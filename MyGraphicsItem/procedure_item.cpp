@@ -4,7 +4,7 @@ Procedure_item::Procedure_item(QGraphicsItem *parent) : Myitem_base(parent)
 {
     setLenth(150);
     setWidth(80);
-    //初始化画笔样式
+
     QPen pen(Qt::black, 2);
     this->setPen(pen);
 
@@ -33,7 +33,7 @@ void Procedure_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
     qreal lenth = getLenth();
     qreal width = getWidth();
-    QRect rect = QRect(-lenth/2, -width/2, lenth, width); //这个rect在scene坐标系中
+    QRect rect = QRect(-lenth/2, -width/2, lenth, width); 
     painter->drawRect(rect);
 }
 

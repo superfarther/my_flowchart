@@ -62,16 +62,16 @@ void Adsorption_point::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         emit arrowPress(this);
 
-        event->accept();    //防止press吸附点时，父图元的拖拽事件被触发
+        event->accept();
     }
-    //MyPointBase::mousePressEvent(event);  若将事件传递给父对象，会导致父图元的拖拽事件被触发
+
 }
 
 void Adsorption_point::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     emit arrowMove(event->scenePos(), this);
 
-    event->accept();  //似乎因为mousePress事件被accept，使得mouseMove事件不会被传递给父类，因此不写accept也无影响
+    event->accept();
     //MyPointBase::mouseMoveEvent(event);   暂不清楚mouseMove事件是否需要传递给父对象
 }
 
@@ -83,7 +83,7 @@ void Adsorption_point::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         event->accept();
     }
-    //MyPointBase::mouseReleaseEvent(event);    暂不清楚mouseRelease是否需要传递给父对象
+ 
 }
 
 Adsorption_point::connectArrowWhich Adsorption_point::getToArrowWhich() const

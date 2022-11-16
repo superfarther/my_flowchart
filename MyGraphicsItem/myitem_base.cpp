@@ -57,30 +57,26 @@ void Myitem_base::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void Myitem_base::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    central_point = this->pos();    //this->pos()默认返回图形中心点坐标，相对于scene坐标系
-    update_adsPoint();              //更新吸附点坐标
+    central_point = this->pos();    
+    update_adsPoint();              
 
     //同步移动吸附点连接的箭头
     Adsorption_point::connectArrowWhich toArrowWhich;
-    //上吸附点
     toArrowWhich = getTop_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getTop_adsPoint()->getToArrow()->arrowRepaintEvent(getTop_adsPoint()->getPos(), toArrowWhich);
     }
-    //下吸附点
     toArrowWhich = getBelow_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getBelow_adsPoint()->getToArrow()->arrowRepaintEvent(getBelow_adsPoint()->getPos(), toArrowWhich);
     }
-    //左吸附点
     toArrowWhich = getLeft_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getLeft_adsPoint()->getToArrow()->arrowRepaintEvent(getLeft_adsPoint()->getPos(), toArrowWhich);
     }
-    //右吸附点
     toArrowWhich = getRight_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
@@ -107,8 +103,8 @@ void Myitem_base::initialize_text()
     text->setHtml(QString("<div style='background-color: #FFEBCD;'>") + "" + "</div>");
     text->setTextInteractionFlags(Qt::TextEditorInteraction);
     text->setTextWidth(this->getLenth()-20);
-    text->setPos(-lenth/2+10, -width/2);   //相对于父图元的坐标
-    //文字居中
+    text->setPos(-lenth/2+10, -width/2);  
+
     QTextBlockFormat format;
     format.setAlignment(Qt::AlignCenter);
     QTextCursor cursor = text->textCursor();
@@ -116,7 +112,7 @@ void Myitem_base::initialize_text()
     cursor.mergeBlockFormat(format);
     cursor.clearSelection();
     text->setTextCursor(cursor);
-    //设置字体
+
     QFont font;
     font.setBold(true);
     font.setFamily("微软雅黑");
@@ -147,19 +143,19 @@ Adsorption_point *Myitem_base::getTop_adsPoint() const
 
 void Myitem_base::initialize_adsPoint()
 {
-    QPointF point;  //吸附点圆心坐标
-    qreal radius;   //吸附点半径
+    QPointF point;  
+    qreal radius;   
     //上吸附点
     point.setX(this->pos().x());
     point.setY(this->pos().y() - this->width/2);
-    this->top_adsPoint = new Adsorption_point(point, this);     //吸附点的父图元是此Item！！！
+    this->top_adsPoint = new Adsorption_point(point, this);   
 
     radius = top_adsPoint->getRadius();
     this->top_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
     //下吸附点
     point.setX(this->pos().x());
     point.setY(this->pos().y() + this->width/2);
-    this->below_adsPoint = new Adsorption_point(point, this);   //吸附点的父图元是此Item！！！
+    this->below_adsPoint = new Adsorption_point(point, this);   
 
     radius = below_adsPoint->getRadius();
     this->below_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
@@ -178,7 +174,7 @@ void Myitem_base::initialize_adsPoint()
     radius = right_adsPoint->getRadius();
     this->right_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
 
-    disappear_adsPoint();   //初始产生图元时，设置吸附点不可见
+    disappear_adsPoint();   //吸附点不可见
 }
 
 void Myitem_base::update_adsPoint()

@@ -15,21 +15,21 @@ class ArrowItem : public QObject, public QGraphicsLineItem
     Q_OBJECT
 
 public:
-    //箭头的逻辑类型，由引出箭头的图元决定
+    //箭头的逻辑类型
     typedef enum arrowLogicType
     {
-        noType = -1,    //暂不确定
-        commonType,     //普通箭头
-        trueType,       //菱形框的T分支
-        falseType       //菱形框的F分支
+        noType = -1,    
+        commonType,     
+        trueType,       
+        falseType       
     }arrowLogicType;
 
     //箭头的绘制类型
     typedef enum arrowPaintingType
     {
-        straight = 0,       //直线
-        judge_rect_left = 1,    //菱形左吸附点和矩形左吸附点相连，WHILE/DO-WHILE
-        judge_right    //菱形右吸附点引出的箭头，且该菱形下吸附点已经引出了箭头，WHILE
+        straight = 0,      
+        judge_rect_left = 1, 
+        judge_right   
     }arrowPaintingType;
 
     ArrowItem(QGraphicsItem *parent=0, QObject *objParent=0);
@@ -55,39 +55,41 @@ public:
     QGraphicsTextItem *getText() const;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
+    QPainterPath shape() const Q_DECL_OVERRIDE; 
 
-    void paintArrowCluster();
+    void paintArrowCluster();         //绘制箭簇
+    QPolygonF getArrowClusterShape(); //获得箭簇形状
 
-    //item被拖拽时，重绘相应的箭头
-    //item若连接箭尾，则参数pos赋给相应箭头的startPoint
-    //item若连接箭簇，则参数pos赋给相应箭头的endPoint
-    void arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhich toArrowWhich);
-    void arrowClusterRepaintEvent();
+    void arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhich toArrowWhich);  
 
-    void identifyPaintingType();    //标识（设置）箭头的绘制类型
-    arrowPaintingType getPaintingType() const;  //获得箭头的绘制类型
+    void identifyPaintingType();    
+    arrowPaintingType getPaintingType() const;  
+
+    void identifyBrokenLinePath();
+    QPainterPath getBorkenLinePath() const; 
 
 protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) Q_DECL_OVERRIDE;
-    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;    //右键双击，设置菱形框的F分支
-    void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;        //右键单击，设置菱形框的T分支
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;   
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;      
 
 public slots:
-    void mouseRightButtonSignalClick();  //创建一个箭头的单击函数，以区分右键单击和双击
+    void mouseRightButtonSignalClick();  
 
 private:
-    QPointF startPoint; //相对于scene坐标系
+    QPointF startPoint;
     QPointF endPoint;
 
     QGraphicsPolygonItem* arrowCluster; //箭头的箭镞
-    qreal arrowCluster_lenth;   //箭簇三角形的边长
+    qreal arrowCluster_lenth;  
 
     Adsorption_point* tailToAdsPoint = nullptr;  //箭尾连接的吸附点
     Adsorption_point* clusterToAdsPoint = nullptr;   //箭簇连接的吸附点
 
-    arrowLogicType logicType = noType;  //箭头的逻辑类型,初始时不确定
-    arrowPaintingType paintingType = straight;  //箭头的绘制类型，初始为直线
+    arrowLogicType logicType = noType;  //箭头的逻辑类型
+    arrowPaintingType paintingType = straight;  //箭头的绘制类型
+    QPainterPath brokenLinePath;    //折线绘制路径
 
     QGraphicsTextItem* text = nullptr;  //仅用于菱形框的分支提示
 

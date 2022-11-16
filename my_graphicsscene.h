@@ -18,7 +18,7 @@ public:
     My_graphicsscene(QObject *parent = 0);
     ~My_graphicsscene();
 
-    void connectScene_adsPoint(My_graphicsscene* scene, Myitem_base* item); //将scene与item的吸附点connect起来，使得点击吸附点能够绘制箭头
+    void connectScene_adsPoint(My_graphicsscene* scene, Myitem_base* item);
 
 public slots:
     void on_myLabClick(MyLabel::myLabType clickedLabType);   //某幅图片被点击，在scene中添加该种图元
@@ -28,9 +28,9 @@ public slots:
     void on_arrowRelease(QPointF arrow_ReleasePoint);
 
 private:
-    ArrowItem* drawingArrow = nullptr;    //正在绘制中的arrow
-    Myitem_base* highLightingItem = nullptr;    //当拖动箭头时，记录光标所在的item
-    Adsorption_point* highLightingAdsPoint = nullptr;   //当拖动箭头时，记录光标所在的吸附点
+    ArrowItem* drawingArrow = nullptr;
+    Myitem_base* highLightingItem = nullptr;
+    Adsorption_point* highLightingAdsPoint = nullptr;
 };
 
-#endif // MY_GRAPHICSSCENE_H
+#endif

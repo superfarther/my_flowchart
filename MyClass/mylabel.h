@@ -19,10 +19,10 @@ public:
     ~MyLabel();
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;    //鼠标抬起事件，即点击了某幅图片
+    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;    //点击了某幅图片
 
 signals:
-    void myLabClick(enum myLabType mylabtype);  //某幅图片被点击，向外广播它的类型，由scene接收
+    void myLabClick(enum myLabType mylabtype);  //某幅图片被点击，向外广播它的类型
 
 };
 

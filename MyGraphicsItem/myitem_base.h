@@ -24,20 +24,19 @@ public:
     void setWidth(const qreal &value);
 
     QPointF getCentral_point();
-    //Central_point在mouseMoveEvent中自动更新
 
     Adsorption_point *getTop_adsPoint() const;
     Adsorption_point *getBelow_adsPoint() const;
     Adsorption_point *getLeft_adsPoint() const;
     Adsorption_point *getRight_adsPoint() const;
-    void initialize_adsPoint(); //初始化吸附点
-    void update_adsPoint(); //更新吸附点
-    void show_adsPoint();   //设置吸附点可见
-    void disappear_adsPoint();  //设置吸附点不可见
+    void initialize_adsPoint(); 
+    void update_adsPoint(); 
+    void show_adsPoint();  
+    void disappear_adsPoint();  
     Adsorption_point* whichAdsPoint(QPointF eventPos);  //通过hover事件的坐标，判断发生的hover事件是否与吸附点有关。如果有关，返回其指针
 
-    void my_hoverEnterEvent();  //当拖动箭头时，光标移入item
-    void my_hoverLeaveEvent();  //当拖动箭头时，光标移出item
+    void my_hoverEnterEvent();  
+    void my_hoverLeaveEvent();
 
     virtual void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) = 0;    //纯虚函数
 
@@ -54,7 +53,7 @@ private:
     qreal lenth;        //对应boundingrect中的rect的长
     qreal width;        // qreal = double
 
-    QPointF central_point;   //图元中心点坐标，相对于scene坐标系
+    QPointF central_point;   //图元中心点坐标
 
     Adsorption_point *top_adsPoint;
     Adsorption_point *below_adsPoint;
