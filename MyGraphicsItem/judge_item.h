@@ -5,19 +5,36 @@
 
 class Judge_item : public Myitem_base
 {
-
 public:
+
+    typedef enum LoopLimitType 
+    {
+        noType = -1, 
+        noloop, 
+        while_up, 
+        while_below,
+        doWhile_up,
+        doWhile_below 
+    }LoopLimitType;
+
     Judge_item(QGraphicsItem *parent = 0);
     ~Judge_item();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = Q_NULLPTR) Q_DECL_OVERRIDE;
 
-    void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) Q_DECL_OVERRIDE;    //对菱形框来说，T分支和F分支由传入的arrow决定
+    void setNextItem(Myitem_base* nextItem, ArrowItem* arrow = nullptr) Q_DECL_OVERRIDE; 
+    Myitem_base* getNextItem(nextItemType whichType) Q_DECL_OVERRIDE;
+    
+    LoopLimitType getLoopLimitType() const;
+    void setLoopLimitType(const LoopLimitType &value);
+
 
 private:
     Myitem_base* nextTrueItem = nullptr;
     Myitem_base* nextFalseItem = nullptr;
+
+    LoopLimitType loopLimitType = noType; 
 };
 
-#endif // JUDGE_ITEM_H
+#endif 

@@ -22,7 +22,7 @@ void Myitem_base::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
     QPen pen(Qt::green, 2);
     this->setPen(pen);
 
-    show_adsPoint();    //吸附点可见
+    show_adsPoint(); 
     QAbstractGraphicsShapeItem::hoverEnterEvent(event);
 }
 
@@ -31,19 +31,19 @@ void Myitem_base::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QPen pen(Qt::black, 2);
     this->setPen(pen);
 
-    disappear_adsPoint();   //吸附点不可见
+    disappear_adsPoint(); 
     QAbstractGraphicsShapeItem::hoverLeaveEvent(event);
 }
 
 void Myitem_base::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     Adsorption_point *adsPoint = whichAdsPoint(event->pos());
-    //吸附点高亮
+ 
     if(adsPoint)
     {
         adsPoint->my_hoverEnterEvent(event);
     }
-    //取消所有吸附点高亮
+ 
     else
     {
         top_adsPoint->my_hoverLeaveEvent(event);
@@ -57,33 +57,37 @@ void Myitem_base::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void Myitem_base::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    central_point = this->pos();    
-    update_adsPoint();              
+    central_point = this->pos(); 
+    update_adsPoint(); 
 
-    //同步移动吸附点连接的箭头
+ 
     Adsorption_point::connectArrowWhich toArrowWhich;
+ 
     toArrowWhich = getTop_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getTop_adsPoint()->getToArrow()->arrowRepaintEvent(getTop_adsPoint()->getPos(), toArrowWhich);
     }
+ 
     toArrowWhich = getBelow_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getBelow_adsPoint()->getToArrow()->arrowRepaintEvent(getBelow_adsPoint()->getPos(), toArrowWhich);
     }
+ 
     toArrowWhich = getLeft_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getLeft_adsPoint()->getToArrow()->arrowRepaintEvent(getLeft_adsPoint()->getPos(), toArrowWhich);
     }
+ 
     toArrowWhich = getRight_adsPoint()->getToArrowWhich();
     if(toArrowWhich != Adsorption_point::noArrow)
     {
         getRight_adsPoint()->getToArrow()->arrowRepaintEvent(getRight_adsPoint()->getPos(), toArrowWhich);
     }
 
-    //qDebug("%f", this->getTop_adsPoint()->QGraphicsItem::pos().x());    Why???
+ 
     QAbstractGraphicsShapeItem::mouseMoveEvent(event);
 }
 
@@ -97,14 +101,19 @@ void Myitem_base::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
     QAbstractGraphicsShapeItem::mouseDoubleClickEvent(event);
 }
 
+QGraphicsTextItem *Myitem_base::getText() const
+{
+    return text;
+}
+
 void Myitem_base::initialize_text()
 {
     text = new QGraphicsTextItem(this);
     text->setHtml(QString("<div style='background-color: #FFEBCD;'>") + "" + "</div>");
     text->setTextInteractionFlags(Qt::TextEditorInteraction);
     text->setTextWidth(this->getLenth()-20);
-    text->setPos(-lenth/2+10, -width/2);  
-
+    text->setPos(-lenth/2+10, -width/2); 
+ 
     QTextBlockFormat format;
     format.setAlignment(Qt::AlignCenter);
     QTextCursor cursor = text->textCursor();
@@ -112,7 +121,7 @@ void Myitem_base::initialize_text()
     cursor.mergeBlockFormat(format);
     cursor.clearSelection();
     text->setTextCursor(cursor);
-
+ 
     QFont font;
     font.setBold(true);
     font.setFamily("微软雅黑");
@@ -143,30 +152,30 @@ Adsorption_point *Myitem_base::getTop_adsPoint() const
 
 void Myitem_base::initialize_adsPoint()
 {
-    QPointF point;  
-    qreal radius;   
-    //上吸附点
+    QPointF point; 
+    qreal radius; 
+ 
     point.setX(this->pos().x());
     point.setY(this->pos().y() - this->width/2);
-    this->top_adsPoint = new Adsorption_point(point, this);   
+    this->top_adsPoint = new Adsorption_point(point, this); 
 
     radius = top_adsPoint->getRadius();
     this->top_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
-    //下吸附点
+ 
     point.setX(this->pos().x());
     point.setY(this->pos().y() + this->width/2);
-    this->below_adsPoint = new Adsorption_point(point, this);   
+    this->below_adsPoint = new Adsorption_point(point, this); 
 
     radius = below_adsPoint->getRadius();
     this->below_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
-    //左吸附点
+ 
     point.setX(this->pos().x() - this->lenth/2);
     point.setY(this->pos().y());
     this->left_adsPoint = new Adsorption_point(point, this);
 
     radius = left_adsPoint->getRadius();
     this->left_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
-    //右吸附点
+ 
     point.setX(this->pos().x() + this->lenth/2);
     point.setY(this->pos().y());
     this->right_adsPoint = new Adsorption_point(point, this);
@@ -174,25 +183,25 @@ void Myitem_base::initialize_adsPoint()
     radius = right_adsPoint->getRadius();
     this->right_adsPoint->setRect(point.x()-radius, point.y()-radius, 2*radius, 2*radius);
 
-    disappear_adsPoint();   //吸附点不可见
+    disappear_adsPoint(); 
 }
 
 void Myitem_base::update_adsPoint()
 {
     QPointF point;
-    //上吸附点
+ 
     point.setX(this->pos().x());
     point.setY(this->pos().y() - this->width/2);
     this->top_adsPoint->setPos(point);
-    //下吸附点
+ 
     point.setX(this->pos().x());
     point.setY(this->pos().y() + this->width/2);
     this->below_adsPoint->setPos(point);
-    //左吸附点
+ 
     point.setX(this->pos().x() - this->lenth/2);
     point.setY(this->pos().y());
     this->left_adsPoint->setPos(point);
-    //右吸附点
+ 
     point.setX(this->pos().x() + this->lenth/2);
     point.setY(this->pos().y());
     this->right_adsPoint->setPos(point);
@@ -219,22 +228,22 @@ Adsorption_point *Myitem_base::whichAdsPoint(QPointF eventPos)
     qreal mousePosX = eventPos.x();
     qreal mousePosY = eventPos.y();
     qreal adsRadius = this->getTop_adsPoint()->getRadius();
-    //上吸附点
+ 
     if(mousePosX >= -adsRadius && mousePosX <= adsRadius && mousePosY >= -width/2-adsRadius && mousePosY <= -width/2+adsRadius)
     {
         return this->top_adsPoint;
     }
-    //下吸附点
+ 
     else if(mousePosX >= -adsRadius && mousePosX <= adsRadius && mousePosY >= width/2-adsRadius && mousePosY <= width/2+adsRadius)
     {
         return this->below_adsPoint;
     }
-    //左吸附点
+ 
     else if(mousePosX >= -adsRadius-lenth/2 && mousePosX <= adsRadius-lenth/2 && mousePosY >= -adsRadius && mousePosY <= adsRadius)
     {
         return this->left_adsPoint;
     }
-    //右吸附点
+ 
     else if(mousePosX >= -adsRadius+lenth/2 && mousePosX <= adsRadius+lenth/2 && mousePosY >= -adsRadius && mousePosY <= adsRadius)
     {
         return this->right_adsPoint;
@@ -248,7 +257,7 @@ void Myitem_base::my_hoverEnterEvent()
     QPen pen(Qt::green, 2);
     this->setPen(pen);
 
-    show_adsPoint();    //吸附点可见
+    show_adsPoint(); 
 }
 
 void Myitem_base::my_hoverLeaveEvent()
@@ -256,7 +265,7 @@ void Myitem_base::my_hoverLeaveEvent()
     QPen pen(Qt::black, 2);
     this->setPen(pen);
 
-    disappear_adsPoint();   //吸附点不可见
+    disappear_adsPoint(); 
 }
 
 QPointF Myitem_base::getCentral_point()

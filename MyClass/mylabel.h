@@ -7,24 +7,24 @@ class MyLabel : public QLabel
 {
     Q_OBJECT
 public:
-    enum myLabType  //定义枚举变量
+    enum myLabType 
     {
-        initial_end_item = 0,   //圆角矩形
-        procedure_item,         //矩形
-        judge_item              //菱形
+        initial_end_item = 0, 
+        procedure_item, 
+        judge_item 
     };
-    enum myLabType mylabtype;   //声明枚举变量
+    enum myLabType mylabtype; 
 
     MyLabel(QWidget *parent = 0);
     ~MyLabel();
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;    //点击了某幅图片
+    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE; 
 
 signals:
-    void myLabClick(enum myLabType mylabtype);  //某幅图片被点击，向外广播它的类型
+    void myLabClick(enum myLabType mylabtype); 
 
 };
 
 
-#endif // MYLABEL_H
+#endif 

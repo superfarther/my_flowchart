@@ -43,14 +43,16 @@ private:
     void createScene();
     void createView();
 
-    QMenuBar *pMenuBar = nullptr;               //MenuBar
-    QToolBar *pToolbar = nullptr;               //ToolBar
-    QScrollArea *pGraphicScroll = nullptr;      //GraphicsDock
-    My_graphicsscene *pMyScene = nullptr;       //scene
-    My_graphicsview *pMyView = nullptr;         //view
-    MyLabel *initialOrEndLab = nullptr;         //圆角矩形
-    MyLabel *procedureLab = nullptr;            //矩形
-    MyLabel *judgeLab = nullptr;                //菱形
+    QMenuBar *pMenuBar = nullptr; 
+    QToolBar *pToolbar = nullptr; 
+    QScrollArea *pGraphicScroll = nullptr; 
+    My_graphicsscene *pMyScene = nullptr; 
+    My_graphicsview *pMyView = nullptr; 
+    MyLabel *initialOrEndLab = nullptr; 
+    MyLabel *procedureLab = nullptr; 
+    MyLabel *judgeLab = nullptr; 
+
+    QAction *ChartToCppAction = nullptr; 
 };
 
-#endif // MAINWINDOW_H
+#endif 

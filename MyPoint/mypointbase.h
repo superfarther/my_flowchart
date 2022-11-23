@@ -19,8 +19,8 @@ public:
     void setRadius(const qreal &value);
 
 private:
-    QPointF pos;   //点的中心坐标（也即圆心坐标），相对于scnen坐标系
+    QPointF pos; 
     qreal radius;
 };
 
-#endif // MYPOINTBASE_H
+#endif 

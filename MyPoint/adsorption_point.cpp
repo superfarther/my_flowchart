@@ -62,17 +62,17 @@ void Adsorption_point::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         emit arrowPress(this);
 
-        event->accept();
+        event->accept(); 
     }
-
+ 
 }
 
 void Adsorption_point::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     emit arrowMove(event->scenePos(), this);
 
-    event->accept();
-    //MyPointBase::mouseMoveEvent(event);   暂不清楚mouseMove事件是否需要传递给父对象
+    event->accept(); 
+ 
 }
 
 void Adsorption_point::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

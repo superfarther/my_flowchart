@@ -7,7 +7,7 @@ Initial_end_item::Initial_end_item(QGraphicsItem *parent): Myitem_base(parent)
 {
     setLenth(150);
     setWidth(80);
-    //初始化画笔样式
+ 
     QPen pen(Qt::black, 2);
     this->setPen(pen);
 
@@ -32,13 +32,13 @@ void Initial_end_item::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     Q_UNUSED(widget);
     painter->setPen(this->pen());
     painter->setBrush(this->brush());
-    painter->setRenderHint(QPainter::Antialiasing, true); //反走样
+    painter->setRenderHint(QPainter::Antialiasing, true); 
 
     qreal lenth = getLenth();
     qreal width = getWidth();
-    QRect rect = QRect(-lenth/2, -width/2, lenth, width); //这个rect在scene坐标系中
+    QRect rect = QRect(-lenth/2, -width/2, lenth, width); 
     painter->drawRoundedRect(rect, 35, 35);
-    //painter->drawRect(rect);
+ 
 }
 
 void Initial_end_item::setNextItem(Myitem_base* nextItem, ArrowItem* arrow)
@@ -48,3 +48,16 @@ void Initial_end_item::setNextItem(Myitem_base* nextItem, ArrowItem* arrow)
 
     qDebug("ini图元指向 %s图元", typeid(*nextItem).name());
 }
+
+Myitem_base* Initial_end_item::getNextItem(Myitem_base::nextItemType whichType)
+{
+    if(whichType == noMatter){
+ 
+        return this->nextItem;
+    }
+    else{
+        qDebug("错误的参数传入：Initial_end_item::getNextItem(Myitem_base::nextItemType whichType)");
+        exit(-1);
+    }
+}
+

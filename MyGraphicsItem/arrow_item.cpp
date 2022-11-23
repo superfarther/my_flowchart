@@ -14,7 +14,7 @@ ArrowItem::ArrowItem(QGraphicsItem *parent, QObject *objParent) : QGraphicsLineI
 
     this->text = new QGraphicsTextItem(this);
     timer = new QTimer(this);
-    timer->setSingleShot(true); //设置单次计时器
+    timer->setSingleShot(true); 
     connect(timer, &QTimer::timeout, this, &ArrowItem::mouseRightButtonSignalClick);
 }
 
@@ -25,7 +25,7 @@ ArrowItem::~ArrowItem()
 
 void ArrowItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setRenderHint(QPainter::Antialiasing, true);   //反走样
+    painter->setRenderHint(QPainter::Antialiasing, true); 
     painter->setPen(QPen(Qt::black, 2));
 
     if(paintingType == straight){
@@ -63,9 +63,9 @@ QPolygonF ArrowItem::getArrowClusterShape()
 {
     if(paintingType == straight){
         QLineF line(startPoint, endPoint);
-        qreal angleZ = line.angle(); //箭头倾斜角度
-        qreal radianZ = angleZ*PAI/180; //箭头倾斜弧度
-        qreal radianAlpha = 11*PAI/6 - radianZ;  //角α
+        qreal angleZ = line.angle(); 
+        qreal radianZ = angleZ*PAI/180; 
+        qreal radianAlpha = 11*PAI/6 - radianZ; 
         QPointF pointC(endPoint.x() - arrowCluster_lenth*cos(radianAlpha),
                        endPoint.y() - arrowCluster_lenth*sin(radianAlpha));
         QPointF pointD(endPoint.x() - arrowCluster_lenth*sin(PAI/6-radianAlpha),
@@ -96,32 +96,34 @@ QPolygonF ArrowItem::getArrowClusterShape()
 
 void ArrowItem::arrowRepaintEvent(QPointF pos, Adsorption_point::connectArrowWhich toArrowWhich)
 {
+ 
     if(toArrowWhich == Adsorption_point::arrowTail)
     {
         startPoint = pos;
     }
+ 
     else
     {
         endPoint = pos;
     }
     QLineF line(startPoint, endPoint);
     this->setLine(line);
-    arrowCluster->setPolygon(getArrowClusterShape());   //重绘箭簇
-    //text跟随箭头移动
+    arrowCluster->setPolygon(getArrowClusterShape()); 
+ 
     if(paintingType == straight){
         text->setPos((this->startPoint+this->endPoint)/2);
     }
     else{
         text->setPos(brokenLinePath.pointAtPercent(0.5));
     }
-    //update(this->boundingRect()); 暂不清楚是否需要update
+ 
 }
 
 void ArrowItem::identifyPaintingType()
 {
     if(clusterToAdsPoint != nullptr){
-        Myitem_base* startItem = dynamic_cast<Myitem_base*>(tailToAdsPoint->parentItem());  //该箭头连接的起始图元
-        Myitem_base* endItem =  dynamic_cast<Myitem_base*>(clusterToAdsPoint->parentItem());  //该箭头连接的终止图元
+        Myitem_base* startItem = dynamic_cast<Myitem_base*>(tailToAdsPoint->parentItem()); 
+        Myitem_base* endItem =  dynamic_cast<Myitem_base*>(clusterToAdsPoint->parentItem()); 
         if(tailToAdsPoint == startItem->getLeft_adsPoint() && clusterToAdsPoint == endItem->getLeft_adsPoint()
            && typeid(*startItem) != typeid(Initial_end_item) && typeid(*endItem) != typeid(Initial_end_item))
         {
@@ -168,7 +170,7 @@ void ArrowItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
             Myitem_base* endItem = dynamic_cast<Myitem_base*>(this->getClusterToAdsPoint()->parentItem());
             startItem->setNextItem(endItem, this);
 
-            //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
+ 
             text->setPlainText("F");
             text->adjustSize();
             if(paintingType == straight){
@@ -183,9 +185,11 @@ void ArrowItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
             font.setFamily("微软雅黑");
             font.setPointSize(13);
             text->setFont(font);
+ 
         }
     }
-    //QGraphicsLineItem::mouseDoubleClickEvent(event);  若将双击事件传递给父类，会导致计时器被重新启动，why???
+
+ 
 }
 
 void ArrowItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -209,7 +213,7 @@ void ArrowItem::mouseRightButtonSignalClick()
     Myitem_base* endItem = dynamic_cast<Myitem_base*>(this->getClusterToAdsPoint()->parentItem());
     startItem->setNextItem(endItem, this);
 
-    //text->setHtml(QString("<div style='background-color: #DCDCDC;'>") + "T" + "</div>");
+ 
     text->setPlainText("T");
     text->adjustSize();
     if(paintingType == straight){
@@ -224,7 +228,7 @@ void ArrowItem::mouseRightButtonSignalClick()
     font.setFamily("微软雅黑");
     font.setPointSize(13);
     text->setFont(font);
-    //this->scene()->addItem(text); 因为text是箭头的子对象，所以不需手动添加到scene中
+ 
 }
 
 QPainterPath ArrowItem::getBorkenLinePath() const
